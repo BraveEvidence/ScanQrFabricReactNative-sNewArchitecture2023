@@ -8,6 +8,7 @@
 import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {
+  Platform,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -26,6 +27,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import RTNScanQr from 'rtn-scan-qr/js/RTNScanQrNativeComponent';
+import MyAndroidView from './MyAndroidView';
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -42,12 +44,15 @@ function App(): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <RTNScanQr
-        style={{height, width}}
-        onQrScanned={(value: any) => {
-          console.log(value.nativeEvent.value);
-        }}
-      />
+      {Platform.OS === 'ios' && (
+        <RTNScanQr
+          style={{height, width}}
+          onQrScanned={(value: any) => {
+            console.log(value.nativeEvent);
+          }}
+        />
+      )}
+      {Platform.OS === 'android' && <MyAndroidView />}
     </SafeAreaView>
   );
 }
